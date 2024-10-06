@@ -17,16 +17,16 @@ public class FetchPokemonUseCase {
     private PokemonClient pokemon;
 
     public Pokemon2 getPokemon(String name) {
-        Pokemon2 pokemon1 = this.pokemon.getPokemon(name);
-        if ((pokemon1.getName()).equals(this.pokemon.getPokemon(name).getName())){
+        Pokemon2 pokemon1 = this.pokemon.getPokemon(name.toLowerCase());
+        if ((pokemon1.getName()).equals(this.pokemon.getPokemon(name.toLowerCase()).getName())){
             return pokemon1;
         } return null;
     }
 
 
     public Abilities getPokemonAbilities(String name) {
-        Abilities abilities = this.pokemon.getPokemonAbilities(name);
-        if ((abilities.getAbilities().toString()).equals(this.pokemon.getPokemonAbilities(name).getAbilities().toString())){
+        Abilities abilities = this.pokemon.getPokemonAbilities(name.toLowerCase());
+        if ((abilities.getAbilities().toString()).equals(this.pokemon.getPokemonAbilities(name.toLowerCase()).getAbilities().toString())){
             return abilities;
         } return null;
     }
