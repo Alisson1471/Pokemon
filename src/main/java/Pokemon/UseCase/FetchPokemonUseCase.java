@@ -5,9 +5,12 @@ import Pokemon.Domain.BuscaAtributo.TypesAtributes;
 import Pokemon.Domain.DamageInfo.Damage;
 import Pokemon.Domain.PokemonInfos.Pokemon2;
 import Pokemon.Interface.PokemonClient;
+import Pokemon.Interface.PokemonImageClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +18,9 @@ public class FetchPokemonUseCase {
 
     @Autowired
     private PokemonClient pokemon;
+
+    @Autowired
+    private PokemonImageClient pokemonimage;
 
     public Pokemon2 getPokemon(String name) {
         Pokemon2 pokemon1 = this.pokemon.getPokemon(name.toLowerCase());
@@ -40,10 +46,15 @@ public class FetchPokemonUseCase {
 
     public TypesAtributes getPokemonTypes() {
         TypesAtributes typesAtributes = this.pokemon.getPokemonTypes();
-        System.out.println(typesAtributes.getResults().toString());
-        System.out.println(this.pokemon.getPokemonTypes().getResults().toString());
         if ((this.pokemon.getPokemonTypes().getResults().toString()).equals((typesAtributes.getResults().toString()))){
             return typesAtributes;
         } return null;
+    }
+
+    public byte[] getPokemonImage(int id){
+        byte[] pokemonImage = this.pokemonimage.getPokemonImage(id);
+        if(Arrays.equals(this.pokemonimage.getPokemonImage(id), pokemonImage)){
+            return pokemonImage;
+        }return null;
     }
 }

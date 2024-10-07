@@ -13,10 +13,26 @@ import java.util.List;
 @ToString
 public class Pokemon2 {
 
+    private int id;
+
     private String name;
+
+    private Sprites sprites;
 
     private List<TypeSlot> types;
 
+    // Classe interna para mapear os sprites
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @ToString
+    public static class Sprites{
+
+        private String front_default;
+
+        public Sprites() {}
+
+    }
 
     // Classe interna para mapear os tipos
     @Getter

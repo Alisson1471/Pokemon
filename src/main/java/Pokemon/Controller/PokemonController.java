@@ -29,7 +29,9 @@ public class PokemonController {
         ResponsePokemon pokemonResponse = new ResponsePokemon();
         Pokemon2 pokemon1 = fetchPokemonUseCase.getPokemon(poke.getName());
         if (pokemon1 != null) {
+            pokemonResponse.setImage(pokemon1.getSprites().getFront_default());
             pokemonResponse.setName(pokemon1.getName());
+            pokemonResponse.setId(pokemon1.getId());
             List<String> list = new ArrayList<>();
             for (int i = 0; i < pokemon1.getTypes().size(); i++) {
                 list.add(String.valueOf(pokemon1.getTypes().get(i).getType().getName()));
@@ -57,7 +59,6 @@ public class PokemonController {
                         }
                         pokemonResponse.setDouble_damage_to(list2);
                         Abilities abilities = fetchPokemonUseCase.getPokemonAbilities(pokemonResponse.getName());
-                        System.out.println(abilities);
                         List<String> list3 = new ArrayList<>();
                         if (abilities != null) {
                             for (int l = 0; l < abilities.getAbilities().size(); l++) {
@@ -79,6 +80,7 @@ public class PokemonController {
         Pokemon2 pokemon1 = fetchPokemonUseCase.getPokemon(poke.getName());
         if (pokemon1 != null) {
             pokemonResponse.setName(pokemon1.getName());
+            pokemonResponse.setId(pokemon1.getId());
             List<String> list = new ArrayList<>();
             for (int i = 0; i < pokemon1.getTypes().size(); i++) {
                 list.add(String.valueOf(pokemon1.getTypes().get(i).getType().getName()));
@@ -87,6 +89,23 @@ public class PokemonController {
             return ResponseEntity.status(200).body(pokemonResponse);
         }
         return ResponseEntity.status(404).body("Pokemon not found");
+    }
+
+    @GetMapping("/busca-imagem")
+    public ResponseEntity<?> RetornoPokemonImagem(@RequestBody Pokemon poke){
+        ResponsePokemon pokemonResponse = new ResponsePokemon();
+        Pokemon2 pokemon1 = fetchPokemonUseCase.getPokemon(poke.getName());
+        if (pokemon1 != null) {
+            pokemonResponse.setImage(pokemon1.getSprites().getFront_default());
+            pokemonResponse.setName(pokemon1.getName());
+            pokemonResponse.setId(pokemon1.getId());
+            List<String> list = new ArrayList<>();
+            for (int i = 0; i < pokemon1.getTypes().size(); i++) {
+                list.add(String.valueOf(pokemon1.getTypes().get(i).getType().getName()));
+            }
+            pokemonResponse.setTypes(list);
+            return ResponseEntity.status(200).body(pokemonResponse);
+        } return ResponseEntity.status(404).body("Pokemon not found");
     }
 
 }

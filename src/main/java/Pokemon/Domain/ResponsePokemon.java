@@ -1,6 +1,5 @@
 package Pokemon.Domain;
 
-import Pokemon.Domain.PokemonInfos.Pokemon2;
 import lombok.*;
 
 import java.util.List;
@@ -10,7 +9,9 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class ResponsePokemon {
+    private String image;
     private String name;
+    private int id;
     private List<String> types;
     private List<String> abilities;
     private List<String> double_damage_from;
