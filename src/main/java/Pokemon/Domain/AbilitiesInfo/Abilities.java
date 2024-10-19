@@ -15,4 +15,26 @@ public class Abilities {
     private List<Ability> abilities;
 
     public Abilities() {}
+
+    //Classe interna
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @ToString
+    public static class Ability {
+        private AbilityInfo ability;
+
+        public Ability() {}
+
+        //Classe interna
+        @Getter
+        @Setter
+        @AllArgsConstructor
+        @ToString
+        public class AbilityInfo {
+            private String name;
+
+            public AbilityInfo(){}
+        }
+    }
 }

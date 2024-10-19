@@ -1,4 +1,4 @@
-package Pokemon.Domain.BuscaAtributo;
+package Pokemon.Domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,11 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @ToString
-public class Atributes {
-    private String name;
+public class RequestPokemons {
 
-    public Atributes() {}
+    private int offset;
+    private int limit;
+
+    public RequestPokemons() {}
+
 }

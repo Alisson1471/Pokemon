@@ -16,6 +16,7 @@ public class ResponsePokemon {
     private List<String> abilities;
     private List<String> double_damage_from;
     private List<String> double_damage_to;
-
+    private List<String> no_damage_from;
+    private List<String> no_damage_to;
 
 }

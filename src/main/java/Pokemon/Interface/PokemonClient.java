@@ -3,19 +3,26 @@ package Pokemon.Interface;
 import Pokemon.Domain.AbilitiesInfo.Abilities;
 import Pokemon.Domain.BuscaAtributo.TypesAtributes;
 import Pokemon.Domain.DamageInfo.Damage;
+import Pokemon.Domain.Generates.Generate;
 import Pokemon.Domain.PokemonInfos.Pokemon2;
+import Pokemon.Domain.Pokemons.PokemonsDex;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "pokeapi", url = "https://pokeapi.co/api/v2")
 public interface PokemonClient {
+
+    //Pego todos os pokemons
+    @GetMapping("/pokemon-form")
+    PokemonsDex getPokemons(@RequestParam("offset") int offset, @RequestParam("limit") int limit);
 
     //Pego o nome do Pokemon e o tipo dele
     @GetMapping("/pokemon-form/{name}")
     Pokemon2 getPokemon(@PathVariable("name") String name);
 
-    //Pego as abilidades
+    //Pego as habilidades
     @GetMapping("/pokemon/{name}")
     Abilities getPokemonAbilities(@PathVariable("name") String name);
 

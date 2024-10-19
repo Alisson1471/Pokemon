@@ -1,4 +1,4 @@
-package Pokemon.Domain.BuscaAtributo;
+package Pokemon.Domain.Pokemons;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,22 +11,21 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @ToString
-public class TypesAtributes {
-    private String count;
-    private List<Atributes> results;
+public class PokemonsDex {
+    private List<PokemonName> results;
 
-    public TypesAtributes() {}
+    public PokemonsDex() {}
 
-    //Classe interna
     @Getter
     @Setter
     @AllArgsConstructor
     @ToString
-    public static class Atributes {
+    public static class PokemonName {
+
+        private int id;
 
         private String name;
 
-        public Atributes() {}
+        public PokemonName() {}
     }
-
 }

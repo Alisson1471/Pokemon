@@ -3,31 +3,39 @@ package Pokemon.Controller;
 import Pokemon.Domain.AbilitiesInfo.Abilities;
 import Pokemon.Domain.BuscaAtributo.TypesAtributes;
 import Pokemon.Domain.DamageInfo.Damage;
-import Pokemon.Domain.PokemonInfos.Pokemon;
+import Pokemon.Domain.Generates.Generate;
 import Pokemon.Domain.PokemonInfos.Pokemon2;
+import Pokemon.Domain.Pokemons.PokemonsDex;
+import Pokemon.Domain.RequestPokemons;
+import Pokemon.Domain.ResponsePokemons;
 import Pokemon.Domain.ResponsePokemon;
 import Pokemon.UseCase.FetchPokemonUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@CrossOrigin(origins = "*") // Permite requisições de qualquer origem (pode ser restrito)
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/test-pokemon")
 public class PokemonController {
 
-    @Autowired
-    private FetchPokemonUseCase fetchPokemonUseCase;
+    private final FetchPokemonUseCase fetchPokemonUseCase;
 
-    @GetMapping("/busca-basica")
-    public ResponseEntity<?> getPokemonInfo(@RequestBody Pokemon poke) {
+    @GetMapping("busca-pokemons")
+    public ResponsePokemons getPokemons(@RequestParam("offset") int offset, @RequestParam("limit") int limit) {
+        return fetchPokemonUseCase.transitionForResponse(offset, limit);
+    }
+
+    @GetMapping("/busca-basica/{name}")
+    public ResponseEntity<?> getPokemonInfo(@PathVariable String name) {
         ResponsePokemon pokemonResponse = new ResponsePokemon();
-        Pokemon2 pokemon1 = fetchPokemonUseCase.getPokemon(poke.getName());
+        Pokemon2 pokemon1 = fetchPokemonUseCase.getPokemon(name);
         if (pokemon1 != null) {
             pokemonResponse.setImage(pokemon1.getSprites().getFront_default());
             pokemonResponse.setName(pokemon1.getName());
@@ -58,26 +66,36 @@ public class PokemonController {
                             list2.add(damage.getDamage_relations().getDouble_damage_to().get(k).getName());
                         }
                         pokemonResponse.setDouble_damage_to(list2);
-                        Abilities abilities = fetchPokemonUseCase.getPokemonAbilities(pokemonResponse.getName());
                         List<String> list3 = new ArrayList<>();
+                        for (int k = 0; k < damage.getDamage_relations().getNo_damage_from().size(); k++) {
+                            list3.add(damage.getDamage_relations().getNo_damage_from().get(k).getName());
+                        }
+                        pokemonResponse.setNo_damage_from(list3);
+                        List<String> list4 = new ArrayList<>();
+                        for (int k = 0; k < damage.getDamage_relations().getNo_damage_to().size(); k++) {
+                            list4.add(damage.getDamage_relations().getNo_damage_to().get(k).getName());
+                        }
+                        pokemonResponse.setNo_damage_to(list4);
+                        Abilities abilities = fetchPokemonUseCase.getPokemonAbilities(pokemonResponse.getName());
+                        List<String> list5 = new ArrayList<>();
                         if (abilities != null) {
                             for (int l = 0; l < abilities.getAbilities().size(); l++) {
-                                list3.add(String.valueOf(abilities.getAbilities().get(l).getAbility().getName()));
+                                list5.add(String.valueOf(abilities.getAbilities().get(l).getAbility().getName()));
                             }
-                            pokemonResponse.setAbilities(list3);
+                            pokemonResponse.setAbilities(list5);
                         }else{return ResponseEntity.status(404).body("Abilities not found");}
                     }else{return ResponseEntity.status(404).body("Double_Damages not found");}
                 }
-                return ResponseEntity.status(200).body(pokemonResponse);
+                return ResponseEntity.status(200).contentType(MediaType.APPLICATION_JSON).body(pokemonResponse);
             }return ResponseEntity.status(404).body("Types not found");
         }return ResponseEntity.status(404).body("Pokemon not found");
     }
 
     @SneakyThrows
-    @GetMapping("/teste")
-    public ResponseEntity<?> RetornoPokemon(@RequestBody Pokemon poke){
+    @GetMapping("/teste/{name}")
+    public ResponseEntity<?> RetornoPokemon(@PathVariable String name){
         ResponsePokemon pokemonResponse = new ResponsePokemon();
-        Pokemon2 pokemon1 = fetchPokemonUseCase.getPokemon(poke.getName());
+        Pokemon2 pokemon1 = fetchPokemonUseCase.getPokemon(name);
         if (pokemon1 != null) {
             pokemonResponse.setName(pokemon1.getName());
             pokemonResponse.setId(pokemon1.getId());
@@ -92,7 +110,7 @@ public class PokemonController {
     }
 
     @GetMapping("/busca-imagem")
-    public ResponseEntity<?> RetornoPokemonImagem(@RequestBody Pokemon poke){
+    public ResponseEntity<?> RetornoPokemonImagem(@RequestBody Pokemon2 poke){
         ResponsePokemon pokemonResponse = new ResponsePokemon();
         Pokemon2 pokemon1 = fetchPokemonUseCase.getPokemon(poke.getName());
         if (pokemon1 != null) {
@@ -107,5 +125,4 @@ public class PokemonController {
             return ResponseEntity.status(200).body(pokemonResponse);
         } return ResponseEntity.status(404).body("Pokemon not found");
     }
-
 }

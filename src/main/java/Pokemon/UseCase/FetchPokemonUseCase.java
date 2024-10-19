@@ -3,24 +3,56 @@ package Pokemon.UseCase;
 import Pokemon.Domain.AbilitiesInfo.Abilities;
 import Pokemon.Domain.BuscaAtributo.TypesAtributes;
 import Pokemon.Domain.DamageInfo.Damage;
+import Pokemon.Domain.Generates.Generate;
 import Pokemon.Domain.PokemonInfos.Pokemon2;
+import Pokemon.Domain.Pokemons.PokemonsDex;
+import Pokemon.Domain.ResponsePokemons;
 import Pokemon.Interface.PokemonClient;
 import Pokemon.Interface.PokemonImageClient;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class FetchPokemonUseCase {
 
-    @Autowired
-    private PokemonClient pokemon;
+    private final PokemonClient pokemon;
 
-    @Autowired
-    private PokemonImageClient pokemonimage;
+    private final PokemonImageClient pokemonimage;
+
+    public PokemonsDex getPokemons(int offset, int limit) {
+        try{
+            PokemonsDex pokemons = pokemon.getPokemons(offset, limit);
+            if (pokemons == null) {
+                throw new RuntimeException("Personagem não encontrado!");
+            }
+            for (int i = 0; i < pokemons.getResults().size(); i++) {
+                pokemons.getResults().get(i).setId(i + 1);
+            }
+            return pokemons;
+        }catch (NullPointerException ex){
+            throw new RuntimeException("Algo está errado com o que digitou!");
+        }
+    }
+
+    public ResponsePokemons transitionForResponse(int offset, int limit) {
+        PokemonsDex pokemons = getPokemons(offset, limit);
+        ResponsePokemons response = new ResponsePokemons();
+        List<ResponsePokemons.ResponseInfos> infos = new ArrayList<>();
+        for (int i = 0; i < pokemons.getResults().size(); i++) {
+            Pokemon2 pokemon = getPokemon(pokemons.getResults().get(i).getName());
+            ResponsePokemons.ResponseInfos info = new ResponsePokemons.ResponseInfos(pokemon.getSprites().getFront_default(),
+                    pokemons.getResults().get(i).getId(),
+                    pokemons.getResults().get(i).getName());
+            infos.add(info);
+        }
+        response.setResults(infos);
+        return response;
+    }
 
     public Pokemon2 getPokemon(String name) {
         Pokemon2 pokemon1 = this.pokemon.getPokemon(name.toLowerCase());
