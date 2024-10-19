@@ -31,7 +31,7 @@ public class FetchPokemonUseCase {
                 throw new RuntimeException("Personagem não encontrado!");
             }
             for (int i = 0; i < pokemons.getResults().size(); i++) {
-                pokemons.getResults().get(i).setId(i + 1);
+                pokemons.getResults().get(i).setId(i + 1 + offset);
             }
             return pokemons;
         }catch (NullPointerException ex){
