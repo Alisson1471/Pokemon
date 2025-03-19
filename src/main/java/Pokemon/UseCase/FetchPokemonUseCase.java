@@ -7,9 +7,13 @@ import Pokemon.Domain.Generates.Generate;
 import Pokemon.Domain.PokemonInfos.Pokemon2;
 import Pokemon.Domain.Pokemons.PokemonsDex;
 import Pokemon.Domain.ResponsePokemons;
+import Pokemon.Domain.Teste.PokemonTeste;
 import Pokemon.Interface.PokemonClient;
 import Pokemon.Interface.PokemonImageClient;
+import Pokemon.Interface.PokemonRepository;
+import Pokemon.adapter.Adapter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -88,5 +92,11 @@ public class FetchPokemonUseCase {
         if(Arrays.equals(this.pokemonimage.getPokemonImage(id), pokemonImage)){
             return pokemonImage;
         }return null;
+    }
+
+    private final Adapter adapter;
+
+    public List<String> getPokemonsByType(String type){
+        return adapter.fetchNamesByType(type);
     }
 }

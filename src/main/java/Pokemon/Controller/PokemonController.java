@@ -125,4 +125,9 @@ public class PokemonController {
             return ResponseEntity.status(200).body(pokemonResponse);
         } return ResponseEntity.status(404).body("Pokemon not found");
     }
+
+    @GetMapping("/busca-tipo/{type}")
+    public ResponseEntity<?> RetornoPokemonTipo(@PathVariable String type){
+        return ResponseEntity.status(200).body(fetchPokemonUseCase.getPokemonsByType(type));
+    }
 }
