@@ -8,6 +8,7 @@ import Pokemon.Domain.PokemonInfos.Pokemon2;
 import Pokemon.Domain.Pokemons.PokemonsDex;
 import Pokemon.Domain.ResponsePokemons;
 import Pokemon.Domain.Teste.PokemonTeste;
+import Pokemon.Domain.mobile.PokemonMobile;
 import Pokemon.Interface.PokemonClient;
 import Pokemon.Interface.PokemonImageClient;
 import Pokemon.Interface.PokemonRepository;
@@ -65,6 +66,12 @@ public class FetchPokemonUseCase {
         } return null;
     }
 
+    public PokemonMobile getPokemonInfo(String name) {
+        PokemonMobile pokemon1 = this.pokemon.getPokemonInfos(name.toLowerCase());
+        if ((pokemon1.getName()).equals(this.pokemon.getPokemonInfos(name.toLowerCase()).getName())) {
+            return pokemon1;
+        } return null;
+    }
 
     public Abilities getPokemonAbilities(String name) {
         Abilities abilities = this.pokemon.getPokemonAbilities(name.toLowerCase());

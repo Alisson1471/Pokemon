@@ -9,6 +9,7 @@ import Pokemon.Domain.Pokemons.PokemonsDex;
 import Pokemon.Domain.RequestPokemons;
 import Pokemon.Domain.ResponsePokemons;
 import Pokemon.Domain.ResponsePokemon;
+import Pokemon.Domain.mobile.PokemonMobile;
 import Pokemon.UseCase.FetchPokemonUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -27,9 +28,14 @@ public class PokemonController {
 
     private final FetchPokemonUseCase fetchPokemonUseCase;
 
-    @GetMapping("busca-pokemons")
+    @GetMapping("/busca-pokemons")
     public ResponsePokemons getPokemons(@RequestParam("offset") int offset, @RequestParam("limit") int limit) {
         return fetchPokemonUseCase.transitionForResponse(offset, limit);
+    }
+
+    @GetMapping("/busca-pokemon-mobile/{name}")
+    public PokemonMobile getPokemonInfoMobile(@PathVariable String name) {
+        return fetchPokemonUseCase.getPokemonInfo(name);
     }
 
     @GetMapping("/busca-basica/{name}")

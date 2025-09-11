@@ -1,15 +1,13 @@
-FROM ubuntu:latest AS build
+FROM eclipse-temurin:21-jdk-alpine
 
-RUN apt-get update
-RUN apt-get install openjdk-21-jdk -y
-COPY . .
-RUN apt-get install maven -y
-RUN mvn clean install
+WORKDIR /app
 
-FROM openjdk:21-jdk-slim
+# Copie o JAR da build
+COPY target/*.jar app.jar
 
+# Exponha a porta do Spring Boot
 EXPOSE 8080
 
-COPY --from=build /target/pokemon-0.0.1-SNAPSHOT.jar app.jar
-
-ENTRYPOINT [ "java", "-jar", "app.jar" ]
+# Use ENTRYPOINT com CMD para facilitar substituição via docker run
+ENTRYPOINT ["java", "-jar"]
+CMD ["app.jar"]
