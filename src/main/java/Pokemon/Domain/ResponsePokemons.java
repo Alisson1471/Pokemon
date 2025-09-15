@@ -1,5 +1,6 @@
 package Pokemon.Domain;
 
+import Pokemon.Domain.PokemonInfos.Pokemon2;
 import Pokemon.Domain.Pokemons.PokemonsDex;
 import lombok.*;
 
@@ -11,24 +12,9 @@ import java.util.List;
 @ToString
 public class ResponsePokemons {
 
-    private List<ResponseInfos> results;
+    private List<Pokemon2> results;
 
 
     public ResponsePokemons() {}
-
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @ToString
-    public static class ResponseInfos{
-
-        private String image;
-
-        private int id;
-
-        private String name;
-
-        public ResponseInfos() {}
-    }
 
 }

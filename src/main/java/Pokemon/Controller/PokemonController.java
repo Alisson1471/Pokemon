@@ -29,7 +29,7 @@ public class PokemonController {
     private final FetchPokemonUseCase fetchPokemonUseCase;
 
     @GetMapping("/busca-pokemons")
-    public ResponsePokemons getPokemons(@RequestParam("offset") int offset, @RequestParam("limit") int limit) {
+    public List<Pokemon2> getPokemons(@RequestParam("offset") int offset, @RequestParam("limit") int limit) {
         return fetchPokemonUseCase.transitionForResponse(offset, limit);
     }
 

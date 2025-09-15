@@ -44,18 +44,17 @@ public class FetchPokemonUseCase {
         }
     }
 
-    public ResponsePokemons transitionForResponse(int offset, int limit) {
+    public List<Pokemon2> transitionForResponse(int offset, int limit) {
         PokemonsDex pokemons = getPokemons(offset, limit);
-        ResponsePokemons response = new ResponsePokemons();
-        List<ResponsePokemons.ResponseInfos> infos = new ArrayList<>();
+        List<Pokemon2> response = new ArrayList<>();
         for (int i = 0; i < pokemons.getResults().size(); i++) {
             Pokemon2 pokemon = getPokemon(pokemons.getResults().get(i).getName());
-            ResponsePokemons.ResponseInfos info = new ResponsePokemons.ResponseInfos(pokemon.getSprites().getFront_default(),
-                    pokemons.getResults().get(i).getId(),
-                    pokemons.getResults().get(i).getName());
-            infos.add(info);
+            Pokemon2 info = new Pokemon2(pokemons.getResults().get(i).getId(),
+                    pokemons.getResults().get(i).getName(),
+                    pokemon.getSprites(),
+                    pokemon.getTypes());
+            response.add(info);
         }
-        response.setResults(infos);
         return response;
     }
 
