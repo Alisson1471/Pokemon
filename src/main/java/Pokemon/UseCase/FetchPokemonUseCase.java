@@ -5,6 +5,7 @@ import Pokemon.Domain.BuscaAtributo.TypesAtributes;
 import Pokemon.Domain.DamageInfo.Damage;
 import Pokemon.Domain.Generates.Generate;
 import Pokemon.Domain.PokemonInfos.Pokemon2;
+import Pokemon.Domain.PokemonInfos.Pokemon2Response;
 import Pokemon.Domain.Pokemons.PokemonsDex;
 import Pokemon.Domain.ResponsePokemons;
 import Pokemon.Domain.Teste.PokemonTeste;
@@ -44,22 +45,26 @@ public class FetchPokemonUseCase {
         }
     }
 
-    public List<Pokemon2> transitionForResponse(int offset, int limit) {
+    public List<Pokemon2Response> transitionForResponse(int offset, int limit) {
         PokemonsDex pokemons = getPokemons(offset, limit);
-        List<Pokemon2> response = new ArrayList<>();
+        List<Pokemon2Response> response = new ArrayList<>();
         for (int i = 0; i < pokemons.getResults().size(); i++) {
             Pokemon2 pokemon = getPokemon(pokemons.getResults().get(i).getName());
-            Pokemon2 info = new Pokemon2(pokemons.getResults().get(i).getId(),
+            List<String> tipos = new ArrayList<>();
+            pokemon.getTypes().forEach(p -> {
+                    tipos.add(p.getType().getName());
+            });
+            Pokemon2Response info = new Pokemon2Response(pokemons.getResults().get(i).getId(),
                     pokemons.getResults().get(i).getName(),
-                    pokemon.getSprites(),
-                    pokemon.getTypes());
+                    pokemon.getSprites().getOther().getOfficialArtwork().getFrontDefault(),
+                    tipos);
             response.add(info);
         }
         return response;
     }
 
     public Pokemon2 getPokemon(String name) {
-        Pokemon2 pokemon1 = this.pokemon.getPokemon(name.toLowerCase());
+        Pokemon2 pokemon1 = this.pokemon.getPokemonsInfosMobile(name.toLowerCase());
         if ((pokemon1.getName()).equals(this.pokemon.getPokemon(name.toLowerCase()).getName())){
             return pokemon1;
         } return null;

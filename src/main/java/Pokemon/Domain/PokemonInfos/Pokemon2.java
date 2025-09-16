@@ -1,9 +1,7 @@
 package Pokemon.Domain.PokemonInfos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 import java.util.List;
 
@@ -21,17 +19,37 @@ public class Pokemon2 {
 
     private List<TypeSlot> types;
 
-    // Classe interna para mapear os sprites
     @Getter
     @Setter
     @AllArgsConstructor
+    @NoArgsConstructor
     @ToString
-    public static class Sprites{
+    public static class Sprites {
 
-        private String front_default;
+        @JsonProperty("other")
+        private OthersSprites other;
 
-        public Sprites() {}
+        @Getter
+        @Setter
+        @AllArgsConstructor
+        @NoArgsConstructor
+        @ToString
+        public static class OthersSprites {
 
+            @JsonProperty("official-artwork")
+            private OfficialArtwork officialArtwork;
+
+            @Getter
+            @Setter
+            @AllArgsConstructor
+            @NoArgsConstructor
+            @ToString
+            public static class OfficialArtwork {
+
+                @JsonProperty("front_default")
+                private String frontDefault;
+            }
+        }
     }
 
     // Classe interna para mapear os tipos

@@ -25,6 +25,9 @@ public interface PokemonClient {
     @GetMapping("/pokemon-form/{name}")
     Pokemon2 getPokemon(@PathVariable("name") String name);
 
+    @GetMapping("/pokemon/{name}")
+    Pokemon2 getPokemonsInfosMobile(@PathVariable String name);
+
     //Pego as habilidades
     @GetMapping("/pokemon/{name}")
     Abilities getPokemonAbilities(@PathVariable("name") String name);

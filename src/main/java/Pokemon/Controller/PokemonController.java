@@ -5,6 +5,7 @@ import Pokemon.Domain.BuscaAtributo.TypesAtributes;
 import Pokemon.Domain.DamageInfo.Damage;
 import Pokemon.Domain.Generates.Generate;
 import Pokemon.Domain.PokemonInfos.Pokemon2;
+import Pokemon.Domain.PokemonInfos.Pokemon2Response;
 import Pokemon.Domain.Pokemons.PokemonsDex;
 import Pokemon.Domain.RequestPokemons;
 import Pokemon.Domain.ResponsePokemons;
@@ -29,7 +30,7 @@ public class PokemonController {
     private final FetchPokemonUseCase fetchPokemonUseCase;
 
     @GetMapping("/busca-pokemons")
-    public List<Pokemon2> getPokemons(@RequestParam("offset") int offset, @RequestParam("limit") int limit) {
+    public List<Pokemon2Response> getPokemons(@RequestParam("offset") int offset, @RequestParam("limit") int limit) {
         return fetchPokemonUseCase.transitionForResponse(offset, limit);
     }
 
@@ -43,7 +44,7 @@ public class PokemonController {
         ResponsePokemon pokemonResponse = new ResponsePokemon();
         Pokemon2 pokemon1 = fetchPokemonUseCase.getPokemon(name);
         if (pokemon1 != null) {
-            pokemonResponse.setImage(pokemon1.getSprites().getFront_default());
+            pokemonResponse.setImage(pokemon1.getSprites().getOther().getOfficialArtwork().getFrontDefault());
             pokemonResponse.setName(pokemon1.getName());
             pokemonResponse.setId(pokemon1.getId());
             List<String> list = new ArrayList<>();
@@ -120,7 +121,7 @@ public class PokemonController {
         ResponsePokemon pokemonResponse = new ResponsePokemon();
         Pokemon2 pokemon1 = fetchPokemonUseCase.getPokemon(poke.getName());
         if (pokemon1 != null) {
-            pokemonResponse.setImage(pokemon1.getSprites().getFront_default());
+            pokemonResponse.setImage(pokemon1.getSprites().getOther().getOfficialArtwork().getFrontDefault());
             pokemonResponse.setName(pokemon1.getName());
             pokemonResponse.setId(pokemon1.getId());
             List<String> list = new ArrayList<>();
