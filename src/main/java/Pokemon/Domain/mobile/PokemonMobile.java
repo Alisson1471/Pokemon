@@ -63,7 +63,30 @@ public class PokemonMobile {
     @NoArgsConstructor
     @ToString
     public static class Sprites{
-        private String front_default;
+        @JsonProperty("other")
+        private Pokemon2.Sprites.OthersSprites other;
+
+        @Getter
+        @Setter
+        @AllArgsConstructor
+        @NoArgsConstructor
+        @ToString
+        public static class OthersSprites {
+
+            @JsonProperty("official-artwork")
+            private Pokemon2.Sprites.OthersSprites.OfficialArtwork officialArtwork;
+
+            @Getter
+            @Setter
+            @AllArgsConstructor
+            @NoArgsConstructor
+            @ToString
+            public static class OfficialArtwork {
+
+                @JsonProperty("front_default")
+                private String frontDefault;
+            }
+        }
     }
 
 }

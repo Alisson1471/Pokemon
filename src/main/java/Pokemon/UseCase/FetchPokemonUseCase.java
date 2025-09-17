@@ -9,7 +9,9 @@ import Pokemon.Domain.PokemonInfos.Pokemon2Response;
 import Pokemon.Domain.Pokemons.PokemonsDex;
 import Pokemon.Domain.ResponsePokemons;
 import Pokemon.Domain.Teste.PokemonTeste;
+import Pokemon.Domain.mobile.Encounteurs;
 import Pokemon.Domain.mobile.PokemonMobile;
+import Pokemon.Domain.mobile.PokemonMobileResponse;
 import Pokemon.Interface.PokemonClient;
 import Pokemon.Interface.PokemonImageClient;
 import Pokemon.Interface.PokemonRepository;
@@ -70,10 +72,33 @@ public class FetchPokemonUseCase {
         } return null;
     }
 
-    public PokemonMobile getPokemonInfo(String name) {
+    public PokemonMobileResponse getPokemonInfo(String name) {
         PokemonMobile pokemon1 = this.pokemon.getPokemonInfos(name.toLowerCase());
         if ((pokemon1.getName()).equals(this.pokemon.getPokemonInfos(name.toLowerCase()).getName())) {
-            return pokemon1;
+
+            List<String> tipos = new ArrayList<>();
+            pokemon1.getTypes().forEach(p -> {
+                tipos.add(p.getType().getName());
+            });
+
+            List<PokemonMobileResponse.Enconteur> enconteursResponse = new ArrayList<>();
+            this.pokemon.getPokemonEncountersMobile(pokemon1.getId()).forEach(p -> {
+                PokemonMobileResponse.Enconteur encounter = new PokemonMobileResponse.Enconteur(
+                        p.getLocationArea().getName(),
+                        p.getVersionDetails().getFirst().getMaxChance()
+                );
+                enconteursResponse.add(encounter);
+            });
+
+            PokemonMobileResponse response = new PokemonMobileResponse(
+                    pokemon1.getId(),
+                    pokemon1.getName(),
+                    pokemon1.getSprites().getOther().getOfficialArtwork().getFrontDefault(),
+                    pokemon1.getStats(),
+                    enconteursResponse,
+                    tipos);
+
+            return response;
         } return null;
     }
 

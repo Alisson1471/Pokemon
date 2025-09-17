@@ -11,6 +11,7 @@ import Pokemon.Domain.RequestPokemons;
 import Pokemon.Domain.ResponsePokemons;
 import Pokemon.Domain.ResponsePokemon;
 import Pokemon.Domain.mobile.PokemonMobile;
+import Pokemon.Domain.mobile.PokemonMobileResponse;
 import Pokemon.UseCase.FetchPokemonUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -35,7 +36,7 @@ public class PokemonController {
     }
 
     @GetMapping("/busca-pokemon-mobile/{name}")
-    public PokemonMobile getPokemonInfoMobile(@PathVariable String name) {
+    public PokemonMobileResponse getPokemonInfoMobile(@PathVariable String name) {
         return fetchPokemonUseCase.getPokemonInfo(name);
     }
 

@@ -5,11 +5,14 @@ import Pokemon.Domain.BuscaAtributo.TypesAtributes;
 import Pokemon.Domain.DamageInfo.Damage;
 import Pokemon.Domain.PokemonInfos.Pokemon2;
 import Pokemon.Domain.Pokemons.PokemonsDex;
+import Pokemon.Domain.mobile.Encounteurs;
 import Pokemon.Domain.mobile.PokemonMobile;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @FeignClient(name = "pokeapi", url = "https://pokeapi.co/api/v2")
 public interface PokemonClient {
@@ -27,6 +30,9 @@ public interface PokemonClient {
 
     @GetMapping("/pokemon/{name}")
     Pokemon2 getPokemonsInfosMobile(@PathVariable String name);
+
+    @GetMapping("/pokemon/{id}/encounters")
+    List<Encounteurs> getPokemonEncountersMobile(@PathVariable("id") int id);
 
     //Pego as habilidades
     @GetMapping("/pokemon/{name}")
