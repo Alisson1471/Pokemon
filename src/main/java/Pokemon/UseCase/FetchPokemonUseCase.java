@@ -54,10 +54,10 @@ public class FetchPokemonUseCase {
             Pokemon2 pokemon = getPokemon(pokemons.getResults().get(i).getName());
             List<String> tipos = new ArrayList<>();
             pokemon.getTypes().forEach(p -> {
-                    tipos.add(p.getType().getName());
+                    tipos.add(capitalizeWords(p.getType().getName()));
             });
             Pokemon2Response info = new Pokemon2Response(pokemons.getResults().get(i).getId(),
-                    pokemons.getResults().get(i).getName(),
+                    capitalizeWords(pokemons.getResults().get(i).getName()),
                     pokemon.getSprites().getOther().getOfficialArtwork().getFrontDefault(),
                     tipos);
             response.add(info);
@@ -78,13 +78,13 @@ public class FetchPokemonUseCase {
 
             List<String> tipos = new ArrayList<>();
             pokemon1.getTypes().forEach(p -> {
-                tipos.add(p.getType().getName());
+                tipos.add(capitalizeWords(p.getType().getName()));
             });
 
             List<PokemonMobileResponse.Enconteur> enconteursResponse = new ArrayList<>();
             this.pokemon.getPokemonEncountersMobile(pokemon1.getId()).forEach(p -> {
                 PokemonMobileResponse.Enconteur encounter = new PokemonMobileResponse.Enconteur(
-                        p.getLocationArea().getName(),
+                        capitalizeWords(p.getLocationArea().getName()),
                         p.getVersionDetails().getFirst().getMaxChance()
                 );
                 enconteursResponse.add(encounter);
@@ -92,7 +92,7 @@ public class FetchPokemonUseCase {
 
             PokemonMobileResponse response = new PokemonMobileResponse(
                     pokemon1.getId(),
-                    pokemon1.getName(),
+                    capitalizeWords(pokemon1.getName()),
                     pokemon1.getSprites().getOther().getOfficialArtwork().getFrontDefault(),
                     pokemon1.getStats(),
                     enconteursResponse,
@@ -134,5 +134,22 @@ public class FetchPokemonUseCase {
 
     public List<String> getPokemonsByType(String type){
         return adapter.fetchNamesByType(type);
+    }
+
+    public String capitalizeWords(String nome) {
+        if (nome == null || nome.isEmpty()) {
+            return nome;
+        }
+        String[] palavras = nome.toLowerCase().split(" ");
+        StringBuilder sb = new StringBuilder();
+
+        for (String palavra : palavras) {
+            if (!palavra.isEmpty()) {
+                sb.append(Character.toUpperCase(palavra.charAt(0)))
+                        .append(palavra.substring(1))
+                        .append(" ");
+            }
+        }
+        return sb.toString().trim();
     }
 }
