@@ -4,6 +4,7 @@ import Pokemon.Domain.AbilitiesInfo.Abilities;
 import Pokemon.Domain.BuscaAtributo.TypesAtributes;
 import Pokemon.Domain.DamageInfo.Damage;
 import Pokemon.Domain.Generates.Generate;
+import Pokemon.Domain.Generates.Generation;
 import Pokemon.Domain.PokemonInfos.Pokemon2;
 import Pokemon.Domain.PokemonInfos.Pokemon2Response;
 import Pokemon.Domain.Pokemons.PokemonsDex;
@@ -12,6 +13,7 @@ import Pokemon.Domain.Teste.PokemonTeste;
 import Pokemon.Domain.mobile.Encounteurs;
 import Pokemon.Domain.mobile.PokemonMobile;
 import Pokemon.Domain.mobile.PokemonMobileResponse;
+import Pokemon.Interface.GenerationRepository;
 import Pokemon.Interface.PokemonClient;
 import Pokemon.Interface.PokemonImageClient;
 import Pokemon.Interface.PokemonRepository;
@@ -31,6 +33,8 @@ public class FetchPokemonUseCase {
     private final PokemonClient pokemon;
 
     private final PokemonImageClient pokemonimage;
+
+    private final GenerationRepository repository;
 
     public PokemonsDex getPokemons(int offset, int limit) {
         try{
@@ -152,4 +156,16 @@ public class FetchPokemonUseCase {
         }
         return sb.toString().trim();
     }
+
+    public List<Generation> getGenerations() {
+        return repository.findAll();
+    }
+
+    public Generation createGeneration(Generation request) {
+        if (request == null) {
+            throw new NullPointerException("Request cannot be null");
+        }
+        return repository.save(request);
+    }
+
 }

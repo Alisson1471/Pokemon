@@ -4,6 +4,7 @@ import Pokemon.Domain.AbilitiesInfo.Abilities;
 import Pokemon.Domain.BuscaAtributo.TypesAtributes;
 import Pokemon.Domain.DamageInfo.Damage;
 import Pokemon.Domain.Generates.Generate;
+import Pokemon.Domain.Generates.Generation;
 import Pokemon.Domain.PokemonInfos.Pokemon2;
 import Pokemon.Domain.PokemonInfos.Pokemon2Response;
 import Pokemon.Domain.Pokemons.PokemonsDex;
@@ -137,5 +138,15 @@ public class PokemonController {
     @GetMapping("/busca-tipo/{type}")
     public ResponseEntity<?> RetornoPokemonTipo(@PathVariable String type){
         return ResponseEntity.status(200).body(fetchPokemonUseCase.getPokemonsByType(type));
+    }
+
+    @GetMapping("/generation/listAll")
+    public List<Generation> getGeneration() {
+        return fetchPokemonUseCase.getGenerations();
+    }
+
+    @PostMapping("/generation/create")
+    public ResponseEntity<Generation> createGeneration(@RequestBody Generation request) {
+        return ResponseEntity.status(200).body(fetchPokemonUseCase.createGeneration(request));
     }
 }
