@@ -28,6 +28,13 @@ public interface PokemonClient {
     @GetMapping("/pokemon-form/{name}")
     Pokemon2 getPokemon(@PathVariable("name") String name);
 
+    @GetMapping("/pokemon-form/{id}")
+    Pokemon2 getPokemon(@PathVariable("id") int id);
+
+
+    @GetMapping("/pokemon/{id}")
+    Pokemon2 getPokemonsInfosMobile(@PathVariable int id);
+
     @GetMapping("/pokemon/{name}")
     Pokemon2 getPokemonsInfosMobile(@PathVariable String name);
 

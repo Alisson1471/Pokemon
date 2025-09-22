@@ -18,6 +18,7 @@ import Pokemon.Interface.PokemonClient;
 import Pokemon.Interface.PokemonImageClient;
 import Pokemon.Interface.PokemonRepository;
 import Pokemon.adapter.Adapter;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
@@ -55,13 +56,16 @@ public class FetchPokemonUseCase {
         PokemonsDex pokemons = getPokemons(offset, limit);
         List<Pokemon2Response> response = new ArrayList<>();
         for (int i = 0; i < pokemons.getResults().size(); i++) {
-            Pokemon2 pokemon = getPokemon(pokemons.getResults().get(i).getName());
+            Pokemon2 pokemon = getPokemonSafe(pokemons.getResults().get(i).getId());
+
+            if (pokemon == null) continue; // Ignora Pokémon que não existem
+
             List<String> tipos = new ArrayList<>();
             pokemon.getTypes().forEach(p -> {
                     tipos.add(capitalizeWords(p.getType().getName()));
             });
             Pokemon2Response info = new Pokemon2Response(pokemons.getResults().get(i).getId(),
-                    capitalizeWords(pokemons.getResults().get(i).getName()),
+                    capitalizeWords(pokemon.getName()),
                     pokemon.getSprites().getOther().getOfficialArtwork().getFrontDefault(),
                     tipos);
             response.add(info);
@@ -69,14 +73,22 @@ public class FetchPokemonUseCase {
         return response;
     }
 
+    public Pokemon2 getPokemon(int id) {
+        Pokemon2 pokemon1 = this.pokemon.getPokemonsInfosMobile(id);
+        if ((pokemon1.getId()) == (this.pokemon.getPokemon(id).getId())){
+            return pokemon1;
+        } return null;
+    }
+
     public Pokemon2 getPokemon(String name) {
-        Pokemon2 pokemon1 = this.pokemon.getPokemonsInfosMobile(name.toLowerCase());
-        if ((pokemon1.getName()).equals(this.pokemon.getPokemon(name.toLowerCase()).getName())){
+        Pokemon2 pokemon1 = this.pokemon.getPokemonsInfosMobile(name);
+        if ((pokemon1.getId()) == (this.pokemon.getPokemon(name).getId())){
             return pokemon1;
         } return null;
     }
 
     public PokemonMobileResponse getPokemonInfo(String name) {
+        name = normalizeName(name);
         PokemonMobile pokemon1 = this.pokemon.getPokemonInfos(name.toLowerCase());
         if ((pokemon1.getName()).equals(this.pokemon.getPokemonInfos(name.toLowerCase()).getName())) {
 
@@ -166,6 +178,19 @@ public class FetchPokemonUseCase {
             throw new NullPointerException("Request cannot be null");
         }
         return repository.save(request);
+    }
+
+    private Pokemon2 getPokemonSafe(int id) {
+        try {
+            return getPokemon(id);
+        } catch (FeignException.NotFound e) {
+            // Retorna null ou um Pokémon padrão vazio
+            return null;
+        }
+    }
+
+    public String normalizeName(String name) {
+        return name.contains("-") ? name.split("-")[0] : name;
     }
 
 }
