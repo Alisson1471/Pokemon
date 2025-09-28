@@ -10,14 +10,13 @@ import Pokemon.Domain.PokemonInfos.Pokemon2Response;
 import Pokemon.Domain.Pokemons.PokemonsDex;
 import Pokemon.Domain.ResponsePokemons;
 import Pokemon.Domain.Teste.PokemonTeste;
-import Pokemon.Domain.mobile.Encounteurs;
-import Pokemon.Domain.mobile.PokemonMobile;
-import Pokemon.Domain.mobile.PokemonMobileResponse;
+import Pokemon.Domain.mobile.*;
 import Pokemon.Interface.GenerationRepository;
 import Pokemon.Interface.PokemonClient;
 import Pokemon.Interface.PokemonImageClient;
 import Pokemon.Interface.PokemonRepository;
 import Pokemon.adapter.Adapter;
+import Pokemon.mapper.EvolutionMapper;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +36,8 @@ public class FetchPokemonUseCase {
     private final PokemonImageClient pokemonimage;
 
     private final GenerationRepository repository;
+
+    private final EvolutionMapper evolutionMapper;
 
     public PokemonsDex getPokemons(int offset, int limit) {
         try{
@@ -112,6 +113,8 @@ public class FetchPokemonUseCase {
                     .map(this::capitalizeWords)
                     .collect(Collectors.toList());
 
+            List<EvolutionPair> pokemonChain = getPokemonChain(pokemon1.getId());
+
             PokemonMobileResponse response = new PokemonMobileResponse(
                     pokemon1.getId(),
                     capitalizeWords(pokemon1.getName()),
@@ -119,7 +122,8 @@ public class FetchPokemonUseCase {
                     pokemon1.getStats(),
                     enconteursResponse,
                     tipos,
-                    abilities);
+                    abilities,
+                    pokemonChain);
 
             return response;
         } return null;
@@ -198,6 +202,30 @@ public class FetchPokemonUseCase {
 
     public String normalizeName(String name) {
         return name.contains("-") ? name.split("-")[0] : name;
+    }
+
+    public List<EvolutionPair> getPokemonChain(int id) {
+        PokemonSpeciesResponse species = this.pokemon.getPokemonSpecies(id);
+        int idChain = extrairIdComSplit(species.getEvolutionChain().getUrl());
+        EvolutionChainResponse evolutionChain = this.pokemon.getEvolutionChain(idChain);
+        System.out.println(evolutionChain);
+        return evolutionMapper.extractEvolutionPairs(evolutionChain);
+    }
+
+    public int extrairIdComSplit(String evolutionChainUrl) {
+        // 1. Garante que não há barra no final para evitar um array vazio na última posição
+        if (evolutionChainUrl.endsWith("/")) {
+            evolutionChainUrl = evolutionChainUrl.substring(0, evolutionChainUrl.length() - 1);
+        }
+
+        // 2. Divide a string por barras ("/")
+        String[] partes = evolutionChainUrl.split("/");
+
+        // 3. O ID será a última parte (penúltimo elemento do array original se você não remover a barra final)
+        String idString = partes[partes.length - 1];
+
+        // 4. Converte a string do ID para inteiro
+        return Integer.parseInt(idString);
     }
 
 }

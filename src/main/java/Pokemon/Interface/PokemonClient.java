@@ -6,7 +6,9 @@ import Pokemon.Domain.DamageInfo.Damage;
 import Pokemon.Domain.PokemonInfos.Pokemon2;
 import Pokemon.Domain.Pokemons.PokemonsDex;
 import Pokemon.Domain.mobile.Encounteurs;
+import Pokemon.Domain.mobile.EvolutionChainResponse;
 import Pokemon.Domain.mobile.PokemonMobile;
+import Pokemon.Domain.mobile.PokemonSpeciesResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +25,10 @@ public interface PokemonClient {
 
     @GetMapping("/pokemon/{name}")
     PokemonMobile getPokemonInfos(@PathVariable String name);
+
+    //Pega o Sprite do Pokemon
+    @GetMapping("/pokemon/{id}")
+    PokemonMobile.Sprites getPokemonSprites(@PathVariable int id);
 
     //Pego o nome do Pokemon e o tipo dele
     @GetMapping("/pokemon-form/{name}")
@@ -52,5 +58,11 @@ public interface PokemonClient {
     //Encontra todos os tipos de pokémon e será usado para saber qual o id do tipo
     @GetMapping("/type")
     TypesAtributes getPokemonTypes();
+
+    @GetMapping("/pokemon-species/{id}")
+    PokemonSpeciesResponse getPokemonSpecies(@PathVariable("id") int id);
+
+    @GetMapping("/evolution-chain/{id}")
+    EvolutionChainResponse getEvolutionChain(@PathVariable("id") int id);
 
 }

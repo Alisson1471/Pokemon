@@ -47,7 +47,7 @@ public class PokemonMobile {
     @NoArgsConstructor
     @ToString
     public static class TypeSlot {
-        private Pokemon2.TypeSlot.TypeInfo type;
+        private TypeInfo type;
 
         @Getter
         @Setter
@@ -66,7 +66,7 @@ public class PokemonMobile {
     @ToString
     public static class Sprites{
         @JsonProperty("other")
-        private Pokemon2.Sprites.OthersSprites other;
+        private OthersSprites other;
 
         @Getter
         @Setter
@@ -76,7 +76,7 @@ public class PokemonMobile {
         public static class OthersSprites {
 
             @JsonProperty("official-artwork")
-            private Pokemon2.Sprites.OthersSprites.OfficialArtwork officialArtwork;
+            private OfficialArtwork officialArtwork;
 
             @Getter
             @Setter

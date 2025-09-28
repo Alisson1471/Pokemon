@@ -20,6 +20,7 @@ public class PokemonMobileResponse {
     private List<Enconteur> enconteurs;
     private List<String> types;
     private List<String> abilities;
+    private List<EvolutionPair> chains;
 
 
     @Getter
