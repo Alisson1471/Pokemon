@@ -19,6 +19,7 @@ public class PokemonMobileResponse {
     private List<PokemonMobile.Stats> stats;
     private List<Enconteur> enconteurs;
     private List<String> types;
+    private List<String> abilities;
 
 
     @Getter

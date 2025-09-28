@@ -26,6 +26,10 @@ public class Abilities {
 
         public Ability() {}
 
+        public AbilityInfo getAbility() {
+            return ability;
+        }
+
         //Classe interna
         @Getter
         @Setter

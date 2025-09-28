@@ -1,5 +1,6 @@
 package Pokemon.Domain.mobile;
 
+import Pokemon.Domain.AbilitiesInfo.Abilities;
 import Pokemon.Domain.PokemonInfos.Pokemon2;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -18,6 +19,7 @@ public class PokemonMobile {
     private Sprites sprites;
     private List<Stats> stats;
     private List<TypeSlot> types;
+    private List<Abilities.Ability> abilities;
 
     @Getter
     @Setter

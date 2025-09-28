@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -106,13 +107,19 @@ public class FetchPokemonUseCase {
                 enconteursResponse.add(encounter);
             });
 
+            List<String> abilities = pokemon1.getAbilities().stream()
+                    .map(a -> a.getAbility().getName())
+                    .map(this::capitalizeWords)
+                    .collect(Collectors.toList());
+
             PokemonMobileResponse response = new PokemonMobileResponse(
                     pokemon1.getId(),
                     capitalizeWords(pokemon1.getName()),
                     pokemon1.getSprites().getOther().getOfficialArtwork().getFrontDefault(),
                     pokemon1.getStats(),
                     enconteursResponse,
-                    tipos);
+                    tipos,
+                    abilities);
 
             return response;
         } return null;
